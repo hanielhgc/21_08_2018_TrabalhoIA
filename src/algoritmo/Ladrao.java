@@ -101,10 +101,8 @@ public class Ladrao extends ProgramaLadrao {
      * Retorna a adição dos pesos do olfato e da parte visível do mapa aos pesos da visão
      */
 	private int[][] matrizComTodosPesos(){
-        int[][] visao = pesarSensor(sensor.getVisaoIdentificacao(), 5);
-        //TODO: O olfato para verificar o poupador é o que está sendo usado abaixo,
-        // ele retorna a quantas rodadas atrás o poupador passou
-        int[][] olfato = pesarSensor(sensor.getAmbienteOlfatoPoupador(), 3);
+        int[][] visao = pesarSensor(sensor.getVisaoIdentificacao(), 5, true);
+        int[][] olfato = pesarSensor(sensor.getAmbienteOlfatoPoupador(), 3, false);
 
         //Sobrepõe a matriz de olfato na matriz de visão, somando seus pesos
         for(int i = 0; i < olfato.length; i++){
@@ -132,7 +130,7 @@ public class Ladrao extends ProgramaLadrao {
      * Recebe um vetor de um sensor e transforma ele numa matriz quadrada com o tamanho passado.
      * Os valores da matriz gerada são pesados com a função getPeso().
      * */
-    private int[][] pesarSensor(int[] vetor, int tamanhoMatriz){
+    private int[][] pesarSensor(int[] vetor, int tamanhoMatriz, boolean visao){
         int[][] matrizComPeso = new int[tamanhoMatriz][tamanhoMatriz];
 
         int x = 0;
@@ -144,8 +142,12 @@ public class Ladrao extends ProgramaLadrao {
                 //Vetor não vem com o valor do centro
                 matrizComPeso[centro][centro] = 0;
                 i--;
-            }else {
-                matrizComPeso[x][y] = getPeso(vetor[i]);
+            } else {
+                if(visao) {
+                    matrizComPeso[x][y] = getPeso(vetor[i]);
+                }else{
+                    matrizComPeso[x][y] = (vetor[i] == 0) ? 0 : (vetor[i] - 6) * 10;
+                }
             }
 
             if (y < tamanhoMatriz-1) {
