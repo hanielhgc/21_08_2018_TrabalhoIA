@@ -68,12 +68,13 @@ public class Ladrao extends ProgramaLadrao {
             destinos.add(new Destino(2, pesoAux));
         }
 
+        //Define a direção
+        int destinoPos = (destinos.size() == 1) ? 0 : random(destinos.size()-1);
+
         //Marca no mapa a posição atual
         Point pos = sensor.getPosicao();
         mapa[pos.y][pos.x]++;
 
-        //Define a direção
-        int destinoPos = (destinos.size() == 1) ? 0 : random(destinos.size()-1);
         return destinos.get(destinoPos).direcao;
 	}
 
@@ -88,7 +89,7 @@ public class Ladrao extends ProgramaLadrao {
         for (int[][] caminho: caminhos) {
             int pesoAtual = 0;
             for (int[] passo : caminho) {
-                pesoAtual += matriz[x + passo[1]][y + passo[0]];
+                pesoAtual += matriz[x + passo[1]][y + passo[0]] + 1;
             }
             if(pesoAtual < menor){
                 menor = pesoAtual;
