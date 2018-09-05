@@ -217,10 +217,35 @@ public class Ladrao extends ProgramaLadrao {
 	private int random(int max) {
 		return ThreadLocalRandom.current().nextInt(0, max + 1);
 	}
+	
+	int inverterDestinoPos(int destinoPos){
+		int novoDestinoPos=0;
+		
+		if(destinoPos==1){
+			novoDestinoPos=2;
+		}
+		
+		if(destinoPos==2){
+			novoDestinoPos=1;
+		}
+		
+		if(destinoPos==3){
+			novoDestinoPos=4;
+		}
+		
+		if(destinoPos==4){
+			novoDestinoPos=3;
+		}
+		
+		
+		return novoDestinoPos;
+		
+	}
 
 	/**
 	 * Gira a matriz 90 graus para a direita
 	 **/
+	
 	private void rotacionaMatriz(int[][] matriz) {
 		int temp;
 
