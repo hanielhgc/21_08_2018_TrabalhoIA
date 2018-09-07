@@ -11,6 +11,8 @@ public class Ladrao extends ProgramaLadrao {
 	private short[][] mapa = new short[30][30];
 	private List<int[][]> caminhos = new ArrayList<>();
 
+	int NMoedas =0;
+	
 	Ladrao() {
 		criaCaminhos();
 	}
@@ -79,14 +81,19 @@ public class Ladrao extends ProgramaLadrao {
 		Point pos = sensor.getPosicao();
 		mapa[pos.y][pos.x]++;
 
-		System.out.println(destinoPos);
-		if (destinoPos == 0) {
-			cont++;
+		if(NMoedas!= sensor.getNumeroDeMoedas()){
+			NMoedas= sensor.getNumeroDeMoedas();
+			cont=cont+2;
 		}
 
-		if (cont > 30) {
-			cont = 0;
-			return random(6);
+	//	System.out.println(destinoPos);
+		//if (sensor.get) {
+			//cont++;
+		//}
+
+		if (cont!=0) {
+			cont--;
+			return inverterDestinoPos(destinos.get(destinoPos).direcao);
 
 		} else {
 			return destinos.get(destinoPos).direcao;
