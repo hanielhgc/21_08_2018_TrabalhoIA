@@ -11,11 +11,18 @@ public class Ladrao extends ProgramaLadrao {
 	private short[][] mapa = new short[30][30];
 	private List<int[][]> caminhos = new ArrayList<>();
 
-	int NMoedas =0;
-	
+	private int nMoedasAnt =0;
+	private Point posAnterior = new Point();
+    private int contContrario = 0;
+
 	Ladrao() {
 		criaCaminhos();
 	}
+
+	private final int CIMA = 1;
+    private final int BAIXO = 2;
+    private final int DIREITA = 3;
+    private final int ESQUERDA = 4;
 
 	class Destino {
 		Destino(int direcao, int peso) {
@@ -27,19 +34,13 @@ public class Ladrao extends ProgramaLadrao {
 		int peso;
 	}
 
-	/**
-	 * Retorna a direção que dever ser andada nessa rodada, com base nos
-	 * melhores caminhos possíveis encontrados.
-	 **/
-	int cont = 0;
-
 	public int acao() {
 		int[][] matriz = matrizComTodosPesos();
 
 		List<Destino> destinos = new ArrayList<>();
 
 		// Direita
-		destinos.add(new Destino(3, menorPesoDireita(matriz)));
+		destinos.add(new Destino(DIREITA, menorPesoDireita(matriz)));
 
 		// Cima
 		rotacionaMatriz(matriz);
@@ -49,7 +50,7 @@ public class Ladrao extends ProgramaLadrao {
 			if (pesoAux < menorPeso) {
 				destinos.clear();
 			}
-			destinos.add(new Destino(1, pesoAux));
+			destinos.add(new Destino(CIMA, pesoAux));
 		}
 
 		// Esquerda
@@ -60,7 +61,7 @@ public class Ladrao extends ProgramaLadrao {
 			if (pesoAux < menorPeso) {
 				destinos.clear();
 			}
-			destinos.add(new Destino(4, pesoAux));
+			destinos.add(new Destino(ESQUERDA, pesoAux));
 		}
 
 		// Baixo
@@ -71,35 +72,55 @@ public class Ladrao extends ProgramaLadrao {
 			if (pesoAux < menorPeso) {
 				destinos.clear();
 			}
-			destinos.add(new Destino(2, pesoAux));
+			destinos.add(new Destino(BAIXO, pesoAux));
 		}
 
 		// Define a direção
 		int destinoPos = (destinos.size() == 1) ? 0 : random(destinos.size() - 1);
+		int direcao = destinos.get(destinoPos).direcao;
 
 		// Marca no mapa a posição atual
 		Point pos = sensor.getPosicao();
 		mapa[pos.y][pos.x]++;
 
-		if(NMoedas!= sensor.getNumeroDeMoedas()){
-			NMoedas= sensor.getNumeroDeMoedas();
-			cont=cont+2;
+		if(isPrendendoPoupador(direcao)){
+			contContrario += 5;
 		}
 
-	//	System.out.println(destinoPos);
-		//if (sensor.get) {
-			//cont++;
-		//}
-
-		if (cont!=0) {
-			cont--;
-			return inverterDestinoPos(destinos.get(destinoPos).direcao);
-
-		} else {
-			return destinos.get(destinoPos).direcao;
+		if (contContrario > 0) {
+			direcao = inverterDirecao(direcao);
+            contContrario--;
 		}
 
+        nMoedasAnt = sensor.getNumeroDeMoedas();
+		posAnterior = pos;
+		return direcao;
 	}
+
+	private boolean isPrendendoPoupador(int direcao){
+	    if(nMoedasAnt < sensor.getNumeroDeMoedas()){
+	        return true;
+        }
+
+        if(posAnterior.equals(sensor.getPosicao())){
+            int codProxDirecao = -1;
+            switch (direcao){
+                case DIREITA: codProxDirecao = 12; break;
+
+                case ESQUERDA: codProxDirecao = 11; break;
+
+                case CIMA: codProxDirecao = 7; break;
+
+                case BAIXO: codProxDirecao = 16; break;
+            }
+            if(codProxDirecao > -1) {
+                int[] visao = sensor.getVisaoIdentificacao();
+                return isPoupador(visao[codProxDirecao]);
+            }
+        }
+
+        return false;
+    }
 
 	/**
 	 * Acha o caminho com menor peso andando pela direita na matriz, e retorna o
@@ -225,27 +246,27 @@ public class Ladrao extends ProgramaLadrao {
 		return ThreadLocalRandom.current().nextInt(0, max + 1);
 	}
 	
-	int inverterDestinoPos(int destinoPos){
-		int novoDestinoPos=0;
+	private int inverterDirecao(int direcao){
+		int novaDirecao = 0;
 		
-		if(destinoPos==1){
-			novoDestinoPos=2;
+		if(direcao == CIMA){
+			novaDirecao = BAIXO;
 		}
 		
-		if(destinoPos==2){
-			novoDestinoPos=1;
+		if(direcao == BAIXO){
+			novaDirecao = CIMA;
 		}
 		
-		if(destinoPos==3){
-			novoDestinoPos=4;
+		if(direcao == DIREITA){
+			novaDirecao = ESQUERDA;
 		}
 		
-		if(destinoPos==4){
-			novoDestinoPos=3;
+		if(direcao == ESQUERDA){
+			novaDirecao= DIREITA;
 		}
 		
 		
-		return novoDestinoPos;
+		return novaDirecao;
 		
 	}
 
