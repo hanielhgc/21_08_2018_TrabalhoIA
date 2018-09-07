@@ -97,6 +97,9 @@ public class Ladrao extends ProgramaLadrao {
 		return direcao;
 	}
 
+	/**
+	* Define se está prendendo um poupador
+	 **/
 	private boolean isPrendendoPoupador(int direcao){
 	    if(nMoedasAnt < sensor.getNumeroDeMoedas()){
 	        return true;
@@ -219,12 +222,6 @@ public class Ladrao extends ProgramaLadrao {
 			return 0;
 		} else if (isPoupador(cod)) {
 			return -100;
-
-			/*
-			 * }else if(isLadrao(cod)){ System.out.println("Encurralou!");
-			 * return Integer.MAX_VALUE/9;
-			 */
-
 		} else {
 			return Integer.MAX_VALUE / 9;
 		}
@@ -232,10 +229,6 @@ public class Ladrao extends ProgramaLadrao {
 
 	private boolean isPoupador(int cod) {
 		return cod >= 100 && cod < 200;
-	}
-
-	private boolean isLadrao(int cod) {
-		return cod >= 200;
 	}
 
 	private boolean isVazio(int cod) {
@@ -337,8 +330,7 @@ public class Ladrao extends ProgramaLadrao {
 		caminhos.add(new int[][] { { 1, 0 }, { 2, 0 }, { 2, 1 }, { 2, 2 }, { 1, 2 }, { 0, 2 }, { -1, 2 } });
 		caminhos.add(new int[][] { { 1, 0 }, { 2, 0 }, { 2, -1 }, { 2, -2 }, { 1, -2 }, { 0, -2 }, { -1, -2 } });
 		caminhos.add(new int[][] { { 1, 0 }, { 2, 0 }, { 2, 1 }, { 2, 2 }, { 1, 2 }, { 0, 2 }, { -1, 2 }, { -2, 2 } });
-		caminhos.add(
-				new int[][] { { 1, 0 }, { 2, 0 }, { 2, -1 }, { 2, -2 }, { 1, -2 }, { 0, -2 }, { -1, -2 }, { -2, -2 } });
+		caminhos.add(new int[][] { { 1, 0 }, { 2, 0 }, { 2, -1 }, { 2, -2 }, { 1, -2 }, { 0, -2 }, { -1, -2 }, { -2, -2 } });
 		caminhos.add(new int[][] { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 0, 2 } });
 		caminhos.add(new int[][] { { 1, 0 }, { 1, -1 }, { 1, -2 }, { 0, -2 } });
 		caminhos.add(new int[][] { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 0, 2 }, { -1, 2 } });
