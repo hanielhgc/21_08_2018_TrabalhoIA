@@ -231,6 +231,10 @@ public class Ladrao extends ProgramaLadrao {
 		return cod >= 100 && cod < 200;
 	}
 
+	private boolean isParede(int cod){
+	    return !isPoupador(cod) && !isVazio(cod);
+    }
+
 	private boolean isVazio(int cod) {
 		return cod == Constantes.posicaoLivre;
 	}
@@ -241,23 +245,33 @@ public class Ladrao extends ProgramaLadrao {
 	
 	private int inverterDirecao(int direcao){
 		int novaDirecao = 0;
-		
-		if(direcao == CIMA){
-			novaDirecao = BAIXO;
+		int[] visao = sensor.getVisaoIdentificacao();
+
+		switch (direcao){
+			case CIMA:
+			    if(!isParede(visao[16])) {
+                    novaDirecao = BAIXO;
+                }
+				break;
+
+			case BAIXO:
+                if(!isParede(visao[7])) {
+                    novaDirecao = CIMA;
+                }
+				break;
+
+			case DIREITA:
+                if(!isParede(visao[11])) {
+                    novaDirecao = ESQUERDA;
+                }
+				break;
+
+			case ESQUERDA:
+                if(!isParede(visao[12])) {
+                    novaDirecao = DIREITA;
+                }
+				break;
 		}
-		
-		if(direcao == BAIXO){
-			novaDirecao = CIMA;
-		}
-		
-		if(direcao == DIREITA){
-			novaDirecao = ESQUERDA;
-		}
-		
-		if(direcao == ESQUERDA){
-			novaDirecao= DIREITA;
-		}
-		
 		
 		return novaDirecao;
 		
