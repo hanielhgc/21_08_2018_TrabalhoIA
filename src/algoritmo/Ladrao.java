@@ -251,30 +251,54 @@ public class Ladrao extends ProgramaLadrao {
 			case CIMA:
 			    if(!isParede(visao[16])) {
                     novaDirecao = BAIXO;
-                }
+                }else{
+			    	novaDirecao = acharEspacoVazio(visao);
+				}
 				break;
 
 			case BAIXO:
                 if(!isParede(visao[7])) {
                     novaDirecao = CIMA;
-                }
+                }else{
+					novaDirecao = acharEspacoVazio(visao);
+				}
 				break;
 
 			case DIREITA:
                 if(!isParede(visao[11])) {
                     novaDirecao = ESQUERDA;
-                }
+                }else{
+					novaDirecao = acharEspacoVazio(visao);
+				}
 				break;
 
 			case ESQUERDA:
                 if(!isParede(visao[12])) {
                     novaDirecao = DIREITA;
-                }
+                }else{
+					novaDirecao = acharEspacoVazio(visao);
+				}
 				break;
 		}
 		
 		return novaDirecao;
 		
+	}
+
+	private int acharEspacoVazio(int[] visao){
+		if(isVazio(visao[7])){
+			return CIMA;
+		}
+
+		if(isVazio(visao[11])){
+			return ESQUERDA;
+		}
+
+		if(isVazio(visao[12])){
+			return DIREITA;
+		}
+
+		return  BAIXO;
 	}
 
 	/**
